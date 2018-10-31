@@ -9,33 +9,25 @@ op = {
 }
 
 def calculate(arg):
-    # stack for calculator
-    tokens = arg.split()
-
-    stack = []
-
-    # process tokens
-    while len(tokens) > 0:
-        token = tokens.pop(0)
+    stack = list()
+    for token in arg.split():
         try:
-            value = int(token)
-            stack.append(value)
+            token = int(token)
+            stack.append(token)
         except ValueError:
-            val2 = int(stack.pop())
-            val1 = int(stack.pop())
-
-            # Look up function in table
-            func = op[token]
-            result = func(val1, val2)
-            
-            tokens.insert(0, result)
-            
-    return result
+            function = op[token]
+            arg2 = stack.pop()
+            arg1 = stack.pop()
+            result = function(arg1, arg2)
+            stack.append(result)    
+    if len(stack) != 1:
+        raise TypeError("Too many parameters")
+    return stack.pop()
 
 def main():
     while True:
         result = calculate(input('rpn calc> '))
-        print(result)
+        print("Result: ", result)
 
 if __name__ == '__main__':
     main()
